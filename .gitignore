@@ -2,6 +2,7 @@
 ./myenv
 __pycache__/
 *.pyc
+./myenv_linux
 
 ./models
 ./downloaded_models
