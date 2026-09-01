@@ -1,0 +1,7 @@
+.env
+./myenv
+__pycache__/
+*.pyc
+
+./models
+./downloaded_models
