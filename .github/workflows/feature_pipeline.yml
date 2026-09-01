@@ -1,0 +1,47 @@
+name: Feature Pipeline
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # every hour, on the hour (UTC)
+  workflow_dispatch: {}    # allows manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write  # needed to commit raw_data.csv back to the repo
+
+jobs:
+  run-feature-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r feature_pipeline/requirements.txt
+
+      - name: Fetch raw data
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          AQICN_API_KEY: ${{ secrets.AQICN_API_KEY }}
+        run: python feature_pipeline/fetch_raw_data.py
+
+      - name: Build features
+        run: python feature_pipeline/build_features.py
+
+      - name: Push to Hopsworks feature store
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+        run: python feature_pipeline/push_to_feature_store.py
+
+      - name: Commit updated raw data history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/raw_data.csv
+          git diff --cached --quiet && echo "No changes to commit" || git commit -m "Hourly raw data update [skip ci]"
+          git push

@@ -1,0 +1,23 @@
+{
+  "model_name": "random_forest",
+  "per_horizon": {
+    "target_aqi_24h": {
+      "rmse": 5.393,
+      "mae": 4.302,
+      "r2": -0.315
+    },
+    "target_aqi_48h": {
+      "rmse": 7.694,
+      "mae": 6.233,
+      "r2": -1.728
+    },
+    "target_aqi_72h": {
+      "rmse": 7.183,
+      "mae": 5.847,
+      "r2": -1.455
+    }
+  },
+  "mean_rmse": 6.757,
+  "mean_mae": 5.461,
+  "mean_r2": -1.166
+}

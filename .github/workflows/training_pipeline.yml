@@ -1,0 +1,31 @@
+name: Training Pipeline
+
+on:
+  schedule:
+    - cron: "0 3 * * *"  # once a day at 03:00 UTC (after several feature-pipeline runs)
+  workflow_dispatch: {}
+
+jobs:
+  run-training-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r training_pipeline/requirements.txt
+
+      - name: Train and register best model
+        env:
+          HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+          HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
+        # --max-history-days 45: full history spans multiple seasonal regimes
+        # (e.g. spring -> monsoon) that models can't generalize across with
+        # only one year of data. A recent rolling window beat a naive
+        # persistence baseline in testing; full history did not.
+        run: python training_pipeline/register_model.py --max-history-days 45
