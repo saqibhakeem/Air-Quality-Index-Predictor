@@ -24,7 +24,7 @@ jobs:
         run: pip install -r feature_pipeline/requirements.txt
 
       - name: Fetch raw data
-        env:
+        env: myenv
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
           AQICN_API_KEY: ${{ secrets.AQICN_API_KEY }}
         run: python feature_pipeline/fetch_raw_data.py
