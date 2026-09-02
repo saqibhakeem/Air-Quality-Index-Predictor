@@ -11,6 +11,7 @@ permissions:
 jobs:
   run-feature-pipeline:
     runs-on: ubuntu-latest
+    environment: myenv
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -24,7 +25,7 @@ jobs:
         run: pip install -r feature_pipeline/requirements.txt
 
       - name: Fetch raw data
-        env: myenv
+        env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
           AQICN_API_KEY: ${{ secrets.AQICN_API_KEY }}
         run: python feature_pipeline/fetch_raw_data.py
