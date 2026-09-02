@@ -24,12 +24,10 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
-
 import requests
+import pandas as pd
 
 from epa_aqi import compute_overall_aqi
-
-
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -142,7 +140,12 @@ def fetch_aqicn() -> dict:
 def build_row() -> dict:
     """Combine all sources into a single raw-data row for right now."""
     row = {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        # Use pandas' own Timestamp string format (space-separated) rather
+        # than Python's datetime.isoformat() (which uses "T") - raw_data.csv
+        # also gets rows from backfill_historical.py written via pandas
+        # to_csv(), so matching that format here avoids a mixed-format column
+        # that pd.to_datetime() can only parse with format="mixed".
+        "timestamp_utc": str(pd.Timestamp.now(tz="UTC")),
         "city": CITY_NAME,
         "lat": LAT,
         "lon": LON,
