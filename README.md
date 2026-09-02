@@ -29,34 +29,26 @@ hazard alerting.
 
 ## 2. Architecture
 
-```
-                 ┌──────────────────┐
-                 │ OpenWeather API   │──────┐
-                 │ (live + history)  │      │
-                 └──────────────────┘      │
-                                            ▼
-                 ┌──────────────────┐   ┌─────────────────────┐
-                 │ Open-Meteo API    │──▶│  Feature Pipeline    │
-                 │ (historical only) │   │  fetch → build →     │
-                 └──────────────────┘   │  push                │
-                                         └──────────┬───────────┘
-                                                     │ features + targets
-                                                     ▼
-                                         ┌─────────────────────┐
-                                         │  Hopsworks            │
-                                         │  Feature Store        │
-                                         │  + Model Registry     │
-                                         └──────────┬───────────┘
-                                    ┌────────────────┼────────────────┐
-                                    ▼                                 ▼
-                        ┌─────────────────────┐         ┌─────────────────────┐
-                        │  Training Pipeline    │         │  Streamlit Web App   │
-                        │  load → train →       │────────▶│  predict → explain   │
-                        │  evaluate → register  │  model  │  → alert             │
-                        └─────────────────────┘         └─────────────────────┘
+flowchart TD
+    OW["OpenWeather API<br/><i>(live + history)</i>"]
+    OM["Open-Meteo API<br/><i>(historical only)</i>"]
+    
+    FP["Feature Pipeline<br/>fetch → build → push"]
+    HS["Hopsworks<br/>Feature Store + Model Registry"]
+    
+    TP["Training Pipeline<br/>load → train → evaluate → register"]
+    APP["Streamlit Web App<br/>predict → explain → alert"]
 
-     GitHub Actions: Feature Pipeline runs hourly, Training Pipeline runs daily
-```
+    OW --> FP
+    OM --> FP
+    FP -->|features + targets| HS
+    HS --> TP
+    HS --> APP
+    TP -->|model| APP
+
+    subgraph GHA ["GitHub Actions"]
+        GHA_INFO["• Feature Pipeline: runs hourly<br/>• Training Pipeline: runs daily"]
+    end
 
 ### Repository structure
 
