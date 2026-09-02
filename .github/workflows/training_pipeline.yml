@@ -21,7 +21,7 @@ jobs:
         run: pip install -r training_pipeline/requirements.txt
 
       - name: Train and register best model
-        env:
+        env: myenv
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
           HOPSWORKS_PROJECT: ${{ secrets.HOPSWORKS_PROJECT }}
         # --max-history-days 45: full history spans multiple seasonal regimes
