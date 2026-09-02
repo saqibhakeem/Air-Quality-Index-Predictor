@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .env
 ./myenv
 __pycache__/
@@ -7,7 +6,6 @@ __pycache__/
 
 ./models
 ./downloaded_models
-=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -226,4 +224,3 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
->>>>>>> 5a60d89faca910d73aa97d710d0e48dfce935c54
