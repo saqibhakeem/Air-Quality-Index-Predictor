@@ -1,11 +1,11 @@
 .env
-./myenv
+.myenv/
 __pycache__/
 *.pyc
-./myenv_linux
+.myenv_linux/
 
-./models
-./downloaded_models
+.models/
+.downloaded_models/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
