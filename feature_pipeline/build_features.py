@@ -64,7 +64,7 @@ def reindex_to_hourly(df: pd.DataFrame) -> pd.DataFrame:
     # on the pandas version and the exact mix of timestamp string formats
     # accumulated in raw_data.csv over time, which would otherwise crash on
     # the .tz access below with an unhelpful AttributeError.
-    df.index = pd.to_datetime(df.index, utc=True)
+    df.index = pd.to_datetime(df.index, utc=True, format="mixed")
     full_index = pd.date_range(df.index.min(), df.index.max(), freq="1h", tz=df.index.tz)
 
     n_missing = len(full_index) - len(df)
