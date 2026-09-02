@@ -8,6 +8,7 @@ on:
 jobs:
   run-training-pipeline:
     runs-on: ubuntu-latest
+    environment: my_env
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
