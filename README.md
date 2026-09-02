@@ -4,7 +4,7 @@
 
 ---
 
-### Try live: [here](karachi-air-quality-index-predictor-saqib.streamlit.app)
+### Try live: [here](https://karachi-air-quality-index-predictor-saqib.streamlit.app)
 
 ## 1. Overview
 
