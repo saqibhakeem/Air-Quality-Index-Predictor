@@ -58,6 +58,13 @@ def reindex_to_hourly(df: pd.DataFrame) -> pd.DataFrame:
     push_to_feature_store.py.
     """
     df = df.set_index("timestamp_utc")
+    # Defensively force a proper tz-aware DatetimeIndex regardless of what
+    # load_raw()'s pd.read_csv(parse_dates=...) actually produced - this has
+    # been observed to silently yield a plain (non-datetime) Index depending
+    # on the pandas version and the exact mix of timestamp string formats
+    # accumulated in raw_data.csv over time, which would otherwise crash on
+    # the .tz access below with an unhelpful AttributeError.
+    df.index = pd.to_datetime(df.index, utc=True)
     full_index = pd.date_range(df.index.min(), df.index.max(), freq="1h", tz=df.index.tz)
 
     n_missing = len(full_index) - len(df)

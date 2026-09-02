@@ -23,13 +23,13 @@ import sys
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from dotenv import load_dotenv
+
 
 import requests
 
 from epa_aqi import compute_overall_aqi
 
-load_dotenv()
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
