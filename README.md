@@ -30,8 +30,8 @@ hazard alerting.
 ## 2. Architecture
 
 flowchart TD
-    OW["OpenWeather API<br/><i>(live + history)</i>"]
-    OM["Open-Meteo API<br/><i>(historical only)</i>"]
+    OW["OpenWeather API<br/>(live + history)"]
+    OM["Open-Meteo API<br/>(historical only)"]
     
     FP["Feature Pipeline<br/>fetch → build → push"]
     HS["Hopsworks<br/>Feature Store + Model Registry"]
@@ -47,7 +47,8 @@ flowchart TD
     TP -->|model| APP
 
     subgraph GHA ["GitHub Actions"]
-        GHA_INFO["• Feature Pipeline: runs hourly<br/>• Training Pipeline: runs daily"]
+        GHA1["Feature Pipeline: runs hourly"]
+        GHA2["Training Pipeline: runs daily"]
     end
 
 ### Repository structure
